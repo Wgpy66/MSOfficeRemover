@@ -55,6 +55,9 @@ nunit-*.xml
 .fake
 
 # ides
-.vs
-.idea
-.vscode
+.vs/
+.idea/
+.vscode/
+
+# editor configuration file
+.editorconfig
