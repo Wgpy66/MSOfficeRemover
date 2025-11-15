@@ -1,2 +1,2 @@
 # MSOfficeRemover
-Office Remover in Python.
+Office Remover in F#.
