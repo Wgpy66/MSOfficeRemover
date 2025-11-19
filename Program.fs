@@ -10,8 +10,8 @@ open System.Runtime.InteropServices
 // ------------------------------ Win32 APIs ------------------------------
 
 let deleteRegistryKey (hkey: RegistryHive) 
-                 (subkey: string) 
-                 (view: Option<RegistryView>) : Result<unit, Exception> =
+                      (subkey: string) 
+                      (view: Option<RegistryView>) : Result<unit, Exception> =
     let reg_view = Option.defaultValue RegistryView.Default view
     try
         Ok(RegistryKey.OpenBaseKey(hkey, reg_view).DeleteSubKey(subkey))
@@ -78,11 +78,11 @@ let parseArgument (args: string[]) =
         opt.Validators.Add(
             fun result ->
                 let allowed_version = [| 12; 14; 15; 16 |]
-                let inputed_version = result.GetValueOrDefault<int>()
-                if not(Array.contains inputed_version allowed_version) then 
-                    result.AddError $"Invalid Office version: {inputed_version}"
+                let inputted_version = result.GetValueOrDefault<int>()
+                if not(Array.contains inputted_version allowed_version) then 
+                    result.AddError $"Invalid Office version: {inputted_version}."
                 else
-                    ignore()
+                    ()
         )
         opt.Required <- true
         opt
@@ -139,14 +139,14 @@ let parseArgument (args: string[]) =
         fun pr -> 
             parse_result_struct <- Some (
                 {
-                    office_product_type = pr.GetValue office_product_type_option;
-                    office_version = pr.GetValue office_version_option;
-                    work_mode = pr.GetValue work_mode_option;
+                    office_product_type  = pr.GetValue office_product_type_option;
+                    office_version       = pr.GetValue office_version_option;
+                    work_mode            = pr.GetValue work_mode_option;
                     keep_activation_info = pr.GetValue keep_activation_info_option;
-                    no_restart = pr.GetValue no_restart_option;
-                    log_path = pr.GetValue log_path_option;
-                    output_state = pr.GetValue output_state_option;
-                    no_copyright_logo = pr.GetValue no_copyright_logo_option
+                    no_restart           = pr.GetValue no_restart_option;
+                    log_path             = pr.GetValue log_path_option;
+                    output_state         = pr.GetValue output_state_option;
+                    no_copyright_logo    = pr.GetValue no_copyright_logo_option
                 }
             )
             0
@@ -158,16 +158,16 @@ let parseArgument (args: string[]) =
 // ------------------------------ Functions for Preparation ------------------------------
 let self_path = Environment.ProcessPath
 
-// check whether cuerrent administrator is running as privilege.
+// check whether current administrator is running as privilege.
 // if it is success, return true. otherwise, return false.
-let checkAdminPriviledge () : bool =
+let checkAdminPrivilege () : bool =
     let administrator = WindowsBuiltInRole.Administrator
-    let current_pricipal = WindowsPrincipal(WindowsIdentity.GetCurrent())
-    current_pricipal.IsInRole administrator
+    let current_principal = WindowsPrincipal(WindowsIdentity.GetCurrent())
+    current_principal.IsInRole administrator
 
-// try getting the administraror priviledge
+// try getting the administrator privileges
 // if it is success, return `Some(())`, otherwise, return `None`.
-let tryGetAdminPriviledge () : option<unit> = 
+let tryGetAdminPrivilege () : option<unit> = 
     let new_self_proc = ProcessStartInfo self_path
     new_self_proc.Arguments <- "--no-logo"
     new_self_proc.Verb <- "runas"
